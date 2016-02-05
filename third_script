@@ -1,0 +1,22 @@
+#This is my third script
+#Created by Alex Mclaughlin
+#This is a class exercise
+mfcList = [ "Atlanta", "Los Angeles", "Dallas", "ArcGIS Programming" ]
+print mfcList
+mfcList.append("New York")
+print mfcList
+mfcList.extend(["San Fran", "Seattle", "San Diego"])
+print mfcList
+mfcList.sort()
+print len(mfcList)
+print mfcList[4:]
+print mfcList[0]
+print len(mfcList)
+def writeMessage(nmb):
+    aTimes = nmb * 7
+    return aTimes
+
+print "Start \n"
+print writeMessage(5)
+aVariable = writeMessage(5)
+print aVariable *5
