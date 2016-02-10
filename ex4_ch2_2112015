@@ -1,0 +1,8 @@
+#ex4_ch2
+#Created by Alex Mclaughlin
+#This is the answer to the second challenege
+
+mList = [1, 2, 3, 4, 5, 6, 7]
+mMax = max(mList)
+mMaxPosition = mList[mMax -1]
+print mMaxPosition
