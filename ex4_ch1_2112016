@@ -1,0 +1,11 @@
+#ex4_ch1
+#Created by Alex Mclaughlin
+#This is the answer to the first challenege
+
+mVariable = "This is a string" # create a string
+mVarCount = mVariable.count("A") #count the number of times that a passed in string is in the string that was created above 
+mCounted = mVarCount #save the count performed above into another variable
+if mCounted > 0: #if count of how many time the passed in string above is in the string created is greated than zero, print yes
+    print "Yes"
+else:           #Else if count of how many time the passed in string above is in the string created is zero, print yes
+    print "No"
