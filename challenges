@@ -1,0 +1,30 @@
+Challenge 1
+Create a script that examines a string for the occurrence of a particular
+letter, as you did previously in this exercise for “Geographic Information
+Systems.” If the letter occurs in the text ( for example, the letter Z ), the
+string “Yes” should be printed to the Interactive Window. If the letter
+does not occur in the text, the string “No” should be printed.
+Challenge 2
+Create a script that examines a list of numbers without duplicates ( for
+example, 2, 8, 64, 16, 32, 4 ) and determines the second-largest number.
+Challenge 3
+Create a script that examines a list of numbers ( for example, 2, 8, 64,
+16, 32, 4, 16, 8 ) to determine whether it contains duplicates. The script
+should print a meaningful result, such as “The list provided contains
+duplicate values” or “The list provided does not contain duplicate values.”
+An optional addition is to remove the duplicates from the list.
+Challenge 4
+Consider the following list:
+mylist = ["Athens", "Barcelona", "Cairo", "Florence", "Helsinki"]
+Determine the results of the following:
+a ) len(mylist)
+b ) mylist[2]
+c ) mylist[1:]
+d ) mylist[-1]
+e ) mylist.index("Cairo")
+f ) mylist.pop(1)
+g ) mylist.sort(reverse = True)
+h ) mylist.append("Berlin")
+These operations are all to be performed on the original list — that is, not
+as a sequence of operations. Try to determine the answer manually first,
+and then check your result by running the code.
