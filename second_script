@@ -1,0 +1,12 @@
+#This is an in class assignemnt
+#Created by Alex Mclaughlin
+#Week 2
+mString = " geographical information system "
+print mString
+print mString.upper()
+print mString.lower()
+print mString.title()
+print mString[14:26]
+print mString[14:]
+print mString.find("info")
+print mString.strip(" ")
