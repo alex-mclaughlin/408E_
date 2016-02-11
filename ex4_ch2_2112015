@@ -1,8 +1,8 @@
-#ex4_ch2
+#ex4_ch2_22016
 #Created by Alex Mclaughlin
 #This is the answer to the second challenege
 
-mList = [1, 2, 3, 4, 5, 6, 7]
-mMax = max(mList)
-mMaxPosition = mList[mMax -1]
-print mMaxPosition
+mList = [200, 56, 3, 11, 58, 43, 6] #create a list
+mList.sort() #sort the list from low to high values
+mSecondMax = mList[-2] #index the list backwards by 2 to get 2nd greatest
+print mSecondMax 
