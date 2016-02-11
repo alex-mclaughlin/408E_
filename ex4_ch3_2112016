@@ -1,0 +1,15 @@
+# myscript
+
+def FindDuplicates(mList):
+    for each in mList:
+        count = mList.count(each)
+        if count > 1:
+            print 'There are duplicates in this list'
+            return True
+    print 'There are no duplicates in this list'
+    return False
+
+a = [2, 8, 64, 16, 32, 4, 17, 8]
+b = [2, 1, 64, 16, 32, 4, 17, 8]
+
+FindDuplicates(a)
