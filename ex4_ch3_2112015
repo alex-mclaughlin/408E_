@@ -1,0 +1,12 @@
+def FindDuplicates(in_list):                    #define function and pass it one parameter
+    unique = set(in_list)                       #set variable unique to an unordered list with built in function named 'set()', pass set() the list
+    for each in unique:                         #for each element in the unordered list named unique from above execute below this line:
+        count = in_list.count(each)             #count the number of time each element in list occurs
+        if count > 1:                           #IF STATEMENT - if count is more than 1 that means there is a duplicate
+            print 'There are duplicates in this list' #if the above is true print "There are dups..."
+            return True                         #and return true
+    print 'There are no duplicates in this list' #if the IF Statement is False Print "There are no dups"
+    return False                                #and return true
+a = [2, 8, 64, 16, 32, 4, 17, 8]                #testing list #1
+b = [2, 1, 64, 16, 32, 4, 17, 8]                #testing list #2
+FindDuplicates(b)                               #call function defined above
