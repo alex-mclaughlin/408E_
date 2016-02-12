@@ -1,0 +1,24 @@
+# Lesson_18
+# Created by: Dr. Soheil Boroushaki
+# Description: Python Functions
+
+'''aList = ["Roads", "Rail Roads", "Airports", "Terminals"]
+
+for anItem in aList:
+    print anItem '''
+
+mAge = input("Enter Your Age")
+if mAge > 50:
+    print "You are too old"
+elif mAge > 30 & mAge < 50:
+    print "It is okay"
+else:
+    print "You are too young"
+
+
+
+'''mAge = raw_input("Enter your age")
+print mAge
+aList.append(mAge)
+print aList'''
+
