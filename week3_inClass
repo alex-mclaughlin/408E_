@@ -22,3 +22,28 @@ print mAge
 aList.append(mAge)
 print aList'''
 
+x = 0
+while x < 20:
+    print x
+    x += 2
+
+
+
+x = 0           
+while x < 20:
+    print x
+    x += 2
+    
+outFile = open(r"E:\Spring 2016\408 Python\week_2\aText.txt", "w")
+outFile.write("a new textfile")
+outFile.close()
+
+
+Lesson 20
+outFile = open(r"E:\Spring 2016\408 Python\week_2\aNewfile.txt", "w")
+x = 5           
+while x < 20:
+    x += 2
+    outFile.write(str(x)+ "\n")
+outFile.close()
+
