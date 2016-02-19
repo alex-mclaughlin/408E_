@@ -1,0 +1,24 @@
+# Introduction ArcPy
+# Created by: Dr. Soheil Boroushaki
+# Description: List Feature Classes in a Geodatabase
+'''
+This is additional description area
+'''
+
+# import arcpy site-package
+import arcpy
+
+# Set geoprocessing environment:
+# a) set the workspace environment - fill in the path to your Exercise_Data.gdb
+aWS = r"C:\AMclaughlin\Week_04_Drop\Practice_Data\Geodatabase\Exercise_Data.gdb"
+arcpy.env.workspace = aWS
+
+print "Current Workspace : \n" + arcpy.env.workspace + "\n"
+
+# List All Feature Classes [tand-alone feature classes that are NOT in a Dataset]
+fcList = arcpy.ListFeatureClasses()
+aTF = open(r"C:\AMclaughlin\Week_04_Drop\Practice_Data\Geodatabase\atextfile.txt", "w")
+for aFC in fcList:
+    aTF.write(aFC + "\n")
+aTF.close()
+    
