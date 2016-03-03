@@ -1,0 +1,23 @@
+#exam 1 question 2
+#alexMclaughlin
+
+#import arcpy
+import arcpy
+
+#set environment
+aWs = r"E:\408\GIS Python Class\Exam-01\Exam_1.gdb"
+arcpy.env.workspace = aWs
+
+
+#explore workspace for point filename
+fcList = arcpy.ListFeatureClasses("","Points")
+for aFc in fcList:
+    print aFc
+    
+#analysis/debug
+distList = [5, 10]
+for aDist in distList:
+    print aDist
+    arcpy.Buffer_analysis("CA_HealthFacs","{0}_mile_buffer.shp".format(aDist), "{0} Miles".format(aDist))
+
+print "Sctipt Complete"
