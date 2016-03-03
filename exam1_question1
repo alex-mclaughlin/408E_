@@ -1,0 +1,28 @@
+#exam 1 question 1
+#alexMclaughlin
+
+#import arcpy
+import arcpy
+
+#set environment
+aWs = r"E:\408\GIS Python Class\Exam-01\Exam_1.gdb"
+arcpy.env.workspace = aWs
+
+#explore polygons in workspace, create polygon list
+fcList = arcpy.ListFeatureClasses("","Polygons")
+for aFc in fcList:
+    print aFc
+
+#analysis/debug
+#create polylist and count of polys in list
+polyList = [fcList]
+listLen = len(fcList)
+#print polyList
+polyFile = open(r"E:\408\GIS Python Class\Exam-01\polyFile.txt", "w")
+for aPoly in polyList:
+    polyFile.write("This workspace has {1} polygon feature classes:\n{0}".format(aPoly, listLen))
+    #print aPoly
+polyFile.close()
+print "Script Complete"
+
+    
