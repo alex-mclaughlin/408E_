@@ -1,0 +1,45 @@
+# Challenge 1
+# Created by: Alex Mclaughlin
+# Description: Python Error Handling and Messages
+
+#import arcpy, os modules
+import arcpy, os
+
+#set the environment
+arcpy.env.workspace = r"C:\AMclaughlin\Week_05\Practice_Data\Geodatabase\Test_Data.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+
+#aList = arcpy.ListFeatureClasses("Point", "", "Point_Dataset") 
+try:
+    #create buffer
+    arcpy.Buffer_analysis("Points", "buffer_175", "175", "", "", "ALL")
+    #clip buffer
+    arcpy.Clip_analysis("LandParcels", "buffer_175", "LandParcels_Clip")
+    #statistics
+    arcpy.Statistics_analysis("LandParcels", "challenge1Table", [["Shape_Area", "SUM"]], "CATEGORY")
+    #create table
+    aList = arcpy.ListTables("challenge1Table")
+    aField = "CATEGORY"
+    aField1 = "SUM_Shape_Area"
+    cursor = arcpy.SearchCursor("challenge1Table")
+    aRow = cursor.next()
+
+    while aRow:
+        print aRow.GetValue("CATEGORY") + "has an area of " + str(aRow.GetValue("SUM_Shape_Area")
+    
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages(2)
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
