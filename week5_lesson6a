@@ -1,0 +1,37 @@
+# Lesson_03
+# Created by: Soheil Boroushaki
+# Description: Python Error Handling and Messages
+
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"C:\AMclaughlin\Week_05\Practice_Data\Geodatabase\Test_Data.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = False
+
+try:
+    #check for filename and then go and delete it
+    if  arcpy.Exists("Buffer"):
+        # Main Python code here    
+        arcpy.Delete_management("Buffer")
+    arcpy.Buffer_analysis("Points", "Buffer", "100")  
+        
+except ValueError:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages(2)
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
