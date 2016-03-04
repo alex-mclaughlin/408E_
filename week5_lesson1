@@ -1,0 +1,18 @@
+# Lesson_01
+# Description: Python Error Handling and Messages
+#how to check if you have a valid workspace
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"C:\AMclaughlin\Week_04_Drop\Practice_Data\Geodatabase\Exercise_Data.gdb"
+
+# Check if a System path / folder or file exists
+print os.path.exists(r"C:\AMclaughlin\Week_04_Drop\Practice_Data\Geodatabase\Exercise_Data.gdb")
+
+# Script end message
+print "\nEnd of the script!"    
