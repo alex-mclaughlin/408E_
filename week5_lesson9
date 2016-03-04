@@ -1,0 +1,38 @@
+# Lesson_09
+
+# Description: Python Error Handling and Messages
+
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"C:\AMclaughlin\Week_05\Practice_Data\Geodatabase\Test_Data.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = False
+
+try:
+    # Get number of records (features) within each feature class  
+    fcList = arcpy.ListFeatureClasses()
+    for aFC in fcList:
+        desc = arcpy.Describe(aFC)
+        print desc.spatialReference
+        print aFC + " has " + str(arcpy.GetCount_management(aFC)) + " Features" + "and is " + str(desc.spatialReference.type)
+    
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
