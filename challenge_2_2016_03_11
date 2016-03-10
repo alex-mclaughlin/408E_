@@ -1,0 +1,38 @@
+# Challenge 2
+# Created by: alexMclaughlin
+
+#Challenge 2: Calculate the area of each land use within 175 meters of each station.
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"E:\Spring 2016\408 Python\Week_06\Geodatabase\Test_Data.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+#analysis/debug
+try:
+#buffer analysis
+    arcpy.Buffer_analysis("Points", "buffer_175", "175", "", "", "NONE")
+    
+    #clip analysis
+    arcpy.Intersect_analysis(["buffer_175", "LandParcels"], "buffInter")
+
+    #dissolve by land use category field
+    arcpy.Dissolve_management("buffInter", "station_dis", ["CATEGORY", "Number_ID"])   
+
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages(2)
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "See {0}.shp for output shapefile.\nFile includes land parcel areas by category, by station.\nEnd of the script!".format(station_dis)
