@@ -1,0 +1,37 @@
+# Challenge 1
+# Created by: alexMclaughlin
+# Description: 
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"E:\Spring 2016\408 Python\Week_06\Geodatabase\Test_Data.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+#analysis/debug
+try:
+#buffer analysis
+    arcpy.Buffer_analysis("Points", "buffer_175", "175", "", "", "ALL")
+    
+    #clip analysis
+    arcpy.Clip_analysis("LandParcels", "buffer_175", "LandParcels_Clip")
+
+    #dissolve by land use category field
+    lp_disso = arcpy.Dissolve_management("LandParcels_Clip", "lp_disso", "CATEGORY")   
+
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages(2)
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "See {0}.shp for output shapefile.\nFile includes land parcel areas by category.\nEnd of the script!".format(lp_disso)
