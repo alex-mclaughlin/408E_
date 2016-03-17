@@ -1,0 +1,43 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Exam 2 Question 3
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment:
+aWS = r"E:\FutureClass\GIS Python Class\Exam-02\Exam_2.gdb"
+aWS = arcpy.env.workspace
+
+# a) set the workspace environment 
+arcpy.env.overwriteOutput = True
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+
+try:
+    # Main code goes here
+    aFC = r"E:\FutureClass\GIS Python Class\Exam-02\Exam_2.gdb\LA_Census_Tracts"
+    for row in aFC:
+        arcpy.AddField_management(aFC, "Area", "FLOAT")
+    for row in aFC:
+        arcpy.CalculateField_management(aFC, "Area",'!shape.area@SQUAREMILES!', "PYTHON")
+    selection = arcpy.Select_analysis("LA_Census_Tracts", "latracts_sel", '"Area" > 2')
+    print arcpy.GetCount_management(selection)
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
