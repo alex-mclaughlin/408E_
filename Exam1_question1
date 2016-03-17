@@ -1,0 +1,42 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Exam 2 Question 1
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment:
+aWS = r"E:\FutureClass\GIS Python Class\Exam-02\Exam_2.gdb"
+aWS = arcpy.env.workspace
+
+# a) set the workspace environment 
+arcpy.env.overwriteOutput = True
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+
+try:
+    # Main code goes here
+    laTracts = r"E:\FutureClass\GIS Python Class\Exam-02\Exam_2.gdb\LA_Census_Tracts"
+    fieldList = arcpy.ListFields(laTracts)
+    for field in fieldList:
+        if len(field.name) <= 5:
+            print "{0} has {1} or less characters in its name\n\n".format(field.name, len(field.name))
+    
+except ValueError:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"   
