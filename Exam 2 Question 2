@@ -1,0 +1,43 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Exam 2 Question 2
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os
+
+# Set geoprocessing environment:
+# a) set the workspace environment 
+aWS = r"E:\FutureClass\GIS Python Class\Exam-02\Exam_2.gdb"
+arcpy.env.workspace = aWS
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+try:
+    # Main code goes here
+    fcList = arcpy.ListFeatureClasses()
+    outFile = open(r"E:\FutureClass\GIS Python Class\Exam-02\outFileA.txt", "w")
+    for aFC in fcList:
+        desc = arcpy.Describe(aFC)
+        outFile.write("{0} is {1} Feature Class\n \n".format(aFC, desc.shapeType))
+        
+    outFile.close()
+                      
+except:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
