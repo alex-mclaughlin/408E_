@@ -1,0 +1,80 @@
+# Created by: Alex Mclaughlin
+# Description: In class assignment
+
+
+# import arcpy site-package and os module
+import arcpy
+
+# Set geoprocessing environment: a) set  the workspace environment 
+aWs = r"E:\Spring 2016\408 Python\InClass_01\Orange_County.gdb"
+arcpy.env.workspace = aWs
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+#create file geodatabase
+arcpy.CreateFileGDB_management(r"E:\Spring 2016\408 Python\InClass_01", "OC_Projected")
+
+#store path for OC_Projected to place projected feature clcasses
+aWs1 = r"E:\Spring 2016\408 Python\InClass_01\OC_Projected.gdb"
+
+#create list of feature classes
+fcList = arcpy.ListFeatureClasses()
+
+#create list of datasets
+dsList = arcpy.ListDatasets()
+
+#open file to write projections
+
+
+try:
+    #check feauture classes for projection
+    outFile = open(r"E:\Spring 2016\408 Python\InClass_01\Projection7.txt", "w")
+    for aFc in fcList:
+
+        #create describe object for each feature class, describe properties needed
+        desc = arcpy.Describe(aFc)
+        spRef = desc.spatialReference.type
+        numFeatures = arcpy.GetCount_management(aFc)
+
+        #check for coordinate system, if projected - copy feature class to new geodatabase and write the feature class name, projection, and number of features to text file
+        if spRef == "Projected":
+            arcpy.Copy_management(aFc, "{0}\{1}".format(aWs1, aFc))
+            outFile.write("{0} has a projection of {1} and {2} features.\n".format(aFc, desc.spatialReference.PCSName, numFeatures))
+        #if not projected - project to  new geodatabase and projection (26946)  write name, coordinate system, and number of features to text file
+        else:
+            #project feature class and store in new geodatabase, then write name, coordinate system, and number of features to text file
+            arcpy.Project_management(aFc, "{0}\{1}".format(aWs1, aFc), arcpy.SpatialReference(26946))
+            outFile.write("{0} has a projection of {1} and {2} features.\n".format(aFc, desc.spatialReference.GCSName, numFeatures))
+
+    #check datasets for projection
+    for aDs in dsList:
+
+        #create describe object for each dataset, describe properties needed
+        desc = arcpy.Describe(aDs)
+        spRef = desc.spatialReference.type
+
+        #check for coordinate system, if projected - copy dataset to new geodatabase and write the dataset name and projection to text file
+        if spRef == "Projected":
+            arcpy.Copy_management(aDs, "{0}\{1}".format(aWs1, aDs))
+            outFile.write("{0} has a projection of {1}.\n".format(aDs, desc.spatialReference.GCSName))
+
+        #project datasets and store in new geodatabase, then write name, coordinate system to text file
+        else:
+            arcpy.ProjectRaster_management(aDs, "{0}\{1}".format(aWs1, aDs), arcpy.SpatialReference(26946))
+            outFile.write("{0} has a projection of {1}.\n".format(aDs, desc.spatialReference.GCSName))
+
+    outFile.close()
+    # Code to run when an error occured
+except:
+    
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages(2)
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"
