@@ -1,0 +1,129 @@
+# Alex Mclaughlin
+# Assignment 7
+# _______________________________
+
+import arcpy
+
+# set environment properties
+aWS = r"E:\Spring2016\408\Assignment_7\LandParcels.gdb"
+arcpy.env.workspace = aWS
+arcpy.env.overwriteoutput = True
+
+try:
+    # Question 1
+    # create feature class and feautue layer
+    fC = "LandParcels"
+    outLayer = "lpLayer"
+    selectionLayer = arcpy.management.MakeFeatureLayer(fC, outLayer)
+
+    # create list of queries
+    queryList = [
+        '',
+        'YearBuilt IS NULL',
+        'YearBuilt > 1955 AND YearBuilt < 1982',
+        ''
+    ]
+
+    # create text file
+    aFile = open(r"E:\Spring2016\408\Assignment_7\aFile.txt", "w")
+
+    # Q1a
+    qNum = 1
+    qLetter = 'A'
+
+    for aQuery in queryList:
+
+        # assign selection variable
+        selectType = "NEW_SELECTION"
+
+        # for question 1
+        if qNum == 1:
+            # get the number of features in LandParcels FC
+            aCount = arcpy.management.GetCount("LandParcels")
+
+        elif qNum in [2, 3]:
+            #select by attributes
+            arcpy.management.SelectLayerByAttribute(selectionLayer, selectType, anExp)
+            aCount = arcpy.management.GetCount(selectionLayer)
+
+        elif qNum == 4:
+            # use select by location
+            # set parameters and count features
+            overlapType = "WITHIN_A_DISTANCE"
+            selectFeatures = "Towers"
+            searchDist = "1 Mile"
+            arcpy.management.SelectLayerByLocation(selectionLayer, overlapType, selectFeatures, searchDist, selectType)
+            answer = arcpy.management.GetCount(selectionLayer)
+
+        # write the answer to the file
+        aFile.write("Q1 {0}) {1} land parcels.\n\n".format(qLetter, answer))
+
+        # update question number and letter
+        qNum += 1
+        qLetter = chr(ord(qLetter) + 1)
+
+    # close file outside of loop
+    aFile.close()
+
+    # Q2
+    # ____________
+
+    # create cursor object
+    cursor = arcpy.da.UpdateCursor(fC, ["UseCode", "Land"])
+
+    # loop through cursor object and update rows
+    for row in cursor:
+
+        # reclassify based on UseCode
+        if row[0] == "A":
+            row[1] = "Single-Family Residential"
+
+        elif row[0] == "B":
+            row[1] = "Multi-Family Residential"
+
+        elif row[0] in ["GOV", "CITY", "CITYV", "CITYW"]:
+            row[1] = "Government"
+
+        elif row[0] == "F1":
+            row[1] = "Commercial"
+
+        elif row[0] == "F2":
+            row[1] = "Industrial"
+
+        elif row[0] in ["POS", "PRK", "PROW"]:
+            row[1] = "Park"
+
+        elif row[0] == "SCH":
+            row[1] = "Schools"
+
+        elif row[0] == "UTIL":
+            row[1] = "Utilities"
+
+        elif row[0] == "VAC":
+            row[1] = "Vacant"
+
+        #
+        aCursor.updateRow(aRow)
+
+    # delete row and cursor
+    del aRow
+    del aCursor
+
+except:
+    # when an error occurs
+    print "An ERROR occurred:\n"
+
+    # get arcpy error messages
+    errorMsg = arcpy.GetMessages(2)
+
+    # if there was no arcpy error, tell the user
+    # otherwise print the error message
+    if errorMsg == "":
+        print "This was not an arcpy error."
+    else:
+        print errorMsg
+
+else:
+    # no errors occurred and the script is finished, get arcpy warnings
+    print "No errors occurred.\n\nThe script has finished.\n"
+    print arcpy.GetMessages(1)
