@@ -1,0 +1,75 @@
+# Assignment 8
+# Created by: 
+# Description: Python 
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os, numpy
+
+# Set geoprocessing environment:
+# a) set the workspace environment 
+aWS = r"C:\amclaughlin\Assignment_08\California.gdb"
+arcpy.env.workspace = aWS
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+try:
+    # Main code goes here
+
+    #create cursor with only CA zipcode populations where the CA zipcode begins with Y
+    aCursor = arcpy.da.SearchCursor("CA_Zipcodes", "POP2001", "PO_NAME LIKE 'Y%'")
+    aList= []
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    print numpy.mean(aList)
+
+    del aRow
+    del aCursor
+
+    #add a field, call it sqf, and make it a float
+    arcpy.AddField_management("CA_Zipcodes", "SQF", "DOUBLE")
+
+    #calcualte field                                            
+    arcpy.CalculateField_management("CA_Zipcodes", "SQF", "!shape.area@SQUAREFEET!", "PYTHON")
+
+    #create cursor with only square feet 
+    aCursor1 = arcpy.da.SearchCursor("CA_Zipcodes", "SQF", "POP2001 > 5000")
+    aList1 = []
+    for aRow in aCursor1:
+        aList1.append(aRow[0])
+    print numpy.std(aList1)
+
+    del aRow
+    del aCursor1
+
+    #question 2
+    arcpy.Statistics_analysis("CA_HealthFacs", "stat_table", [["LIC_BEDS", "SUM"]], "CATEGORY")
+    arcpy.GetCount_management("stat_table")
+    aCursor = arcpy.SearchCursor("CA_Zipcodes", ["CATEGORY", "LIC_BEDS"])
+    for row in aCursor:
+        "{0} has {1} of beds".format(row[0], row[1])
+        
+
+    
+        
+    #aFile = open(r"C:\amclaughlin\Assignment_08", "w")
+    
+except ValueError: 
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
