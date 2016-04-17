@@ -1,0 +1,85 @@
+# Assignment 8
+# Created by: Alex Mclaughlin   
+# Description: Cursor objects and introduction to numpy
+
+# import arcpy site-package and os module
+import arcpy, os, numpy
+
+# Set geoprocessing environment:
+# a) set the workspace environment 
+aWS = r"E:\Spring 2016\408 Python\Assignment_08\California.gdb"
+arcpy.env.workspace = aWS
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+try:
+    # Main code goes here
+    #create a text file for answers
+    aFile = open(r"E:\Spring 2016\408 Python\Assignment_08\aFile.txt", "w")
+
+    #Questions
+    #Q1A
+    #create cursor with only CA zipcode populations where the CA zipcode begins with Y
+    aCursor = arcpy.da.SearchCursor("CA_Zipcodes", "POP2001", "PO_NAME LIKE 'Y%'")
+    aList= []
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    mean = numpy.mean(aList)
+    print mean
+    aFile.write("Q1A) The mean population of 2001 zip codes that begin with the letter Y is {0}.\n".format(mean))
+
+    del aRow
+    del aCursor
+
+    #Q1B
+    #add a field, call it sqf, and make it a float                                                         
+    arcpy.AddField_management("CA_Zipcodes", "SQF", "DOUBLE")
+
+    #calcualte field                                            
+    arcpy.CalculateField_management("CA_Zipcodes", "SQF", "!shape.area@SQUAREFEET!", "PYTHON")
+
+    #create cursor with only square feet 
+    aCursor = arcpy.da.SearchCursor("CA_Zipcodes", "SQF", "POP2001 > 5000")
+    aList = []
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    std = numpy.std(aList)
+    print std
+    aFile.write("Q1B) The standard deviation of the square foot area of zip codes with a population more than 5,000 is {0}.\n".format(std))
+    
+    del aRow
+    del aCursor
+
+    #Q2A
+    arcpy.Statistics_analysis("CA_HealthFacs", "stat_table", [["LIC_BEDS", "SUM"]], "CATEGORY")
+    aCount = arcpy.GetCount_management("stat_table")
+    print aCount
+    aFile.write("Q2A) There are {0} health care facilities within California.\n\n".format(aCount))
+    
+    #Q2B
+    aCursor = arcpy.da.SearchCursor("stat_table", ["CATEGORY", "SUM_LIC_BEDS"])
+    for aRow in aCursor:
+        aFile.write("{0} has {1} beds.\n\n".format(aRow[0], aRow[1]))
+        
+    del aRow
+    del aCursor
+    
+    aFile.close()
+    
+except ValueError: 
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
