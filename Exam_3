@@ -1,0 +1,154 @@
+# Date: 
+# Created by: Alex Mclaughlin 
+# Description: This is Exam 3
+'''
+ 
+'''
+
+# import arcpy site-package and os module
+import arcpy, numpy
+
+# Set geoprocessing environment:
+# a) set the workspace environment 
+aWS = r"E:\Spring 2016\408 Python\Exam-03\Data"
+arcpy.env.workspace = aWS
+
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#   automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+
+
+try:
+    
+    #create a text file
+    aFile = open(r"E:\Spring 2016\408 Python\Exam-03\aFile.txt", "w")
+
+    
+
+    #create a cursor
+    aCursor = arcpy.da.SearchCursor("Pacific.shp","*",'"POP2007" > 50000')
+    
+    #create a list
+    aList = []
+
+    #loop through cursor and assign to list
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    print "QA {0}".format(len(aList))
+    aFile.write("Q1A) There are {0} counties with Population over 50,000".format(len(aList)))
+    del aRow
+    del aCursor
+
+
+
+    #q1b
+
+    
+    #create a cursor
+    aCursor = arcpy.da.SearchCursor("Pacific.shp", "*", '"STATE_NAME" = \'Oregon\'')
+    
+    #create a list
+    aList = []
+    
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    print "QA {0}".format(len(aList))
+    aFile.write("Q1B) There are {0} counties within the state of Oregon".format(len(aList)))
+    del aRow
+    del aCursor
+
+
+    #q1c
+
+    
+    #create a cursor
+    aCursor = arcpy.da.SearchCursor("Pacific.shp", ["ASIAN"], '"STATE_NAME" = \'Washington\'')
+    
+    #create a list
+    aList = []
+    
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    print "QA {0}".format(len(aList))
+    aFile.write("Q1B) There are {0} counties within the state of Washington".format(len(aList)))
+    del aRow
+    del aCursor
+
+    #q1d
+    #add a field for square miles
+    arcpy.AddField_management("Pacific.shp", "SQM", "LONG")
+
+    #calculate a the square miles field
+    arcpy.CalculateField_management("Pacific.shp", "SQM", "!shape.area@SQUAREMILES!", "PYTHON")
+
+    #create a cursor with the square miles of every zipcode
+    aCursor = arcpy.da.SearchCursor("Pacific.shp", ["SQM"])
+
+    #create a list to store square mile values
+    aList = []
+
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    print "QA {0}".format(numpy.mean(aList))
+
+
+
+    #Q2# A
+    rList = arcpy.ListRasters()
+    for aRaster in rList:
+        aRObject = arcpy.Raster(aRaster)
+        print aRObject.name, aRObject.spatialReference.type 
+        
+        if aRObject.spatialReference.type == "Geographic":
+            
+            aSR = arcpy.SpatialReference(26945)
+            arcpy.ProjectRaster_management(aRaster, aRaster + "_P", aSR)
+
+
+    # B
+    rList1 = arcpy.ListRasters()
+    for aRaster in rList1:
+        aRObject = arcpy.Raster(aRaster)
+        
+        if aRObject.spatialReference.type == "Projected":
+            aSlope = Slope(aRObject,"PERCENT_RISE")
+            print "Slope_" + aRObject.name , aSlope.mean
+            aSlope.save("Slope_" + aRObject.name)
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+except ValueError as e:
+    
+    # Code to run when an error occured
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+    #delete cursor objects
+    del aRow
+    del aCursor
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
