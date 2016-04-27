@@ -96,6 +96,7 @@ try:
 
 
     #Q2# A
+    # A
     rList = arcpy.ListRasters()
     for aRaster in rList:
         aRObject = arcpy.Raster(aRaster)
@@ -116,7 +117,6 @@ try:
             aSlope = Slope(aRObject,"PERCENT_RISE")
             print "Slope_" + aRObject.name , aSlope.mean
             aSlope.save("Slope_" + aRObject.name)
-    
     
 
     
