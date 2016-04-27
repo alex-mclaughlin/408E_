@@ -1,0 +1,15 @@
+import arcpy
+mWS = r"C:\AMclaughlin\Assignment_03"
+arcpy.env.workspace = mWS
+
+#1)create input buffer distance list variable
+bdList = ["150", "250", "500"]
+
+#2) create input 
+bInput = "stations.shp"
+ 
+for aBF in bdList:
+    bOutput = "Buffer_{0}".format(aBF)
+    bLU = "{0} Meters".format(aBF)
+    arcpy.Buffer_analysis(bInput, bOutput, bLU)
+print aBF
