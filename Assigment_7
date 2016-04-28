@@ -4,7 +4,7 @@
 import arcpy
 
 # set environment properties
-aWS = r"E:\Spring2016\408\Assignment_7\LandParcels.gdb"
+aWS = r"E:\task7\LandParcels.gdb"
 arcpy.env.workspace = aWS
 arcpy.env.overwriteoutput = True
 
@@ -24,7 +24,7 @@ try:
     ]
 
     # create text file
-    aFile = open(r"E:\Spring2016\408\Assignment_7\aFile.txt", "w")
+    aFile = open(r"E:\task7\aFile.txt", "w")
 
     # Q1a
     qNum = 1
