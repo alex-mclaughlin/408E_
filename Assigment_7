@@ -1,5 +1,4 @@
 # Alex Mclaughlin
-# Assignment 7
 # _______________________________
 
 import arcpy
@@ -10,7 +9,7 @@ arcpy.env.workspace = aWS
 arcpy.env.overwriteoutput = True
 
 try:
-    # Question 1
+    #TASK 1
     # create feature class and feautue layer
     fC = "LandParcels"
     outLayer = "lpLayer"
@@ -36,7 +35,7 @@ try:
         # assign selection variable
         selectType = "NEW_SELECTION"
 
-        # for question 1
+        # for task 1
         if qNum == 1:
             # get the number of features in LandParcels FC
             aCount = arcpy.management.GetCount("LandParcels")
@@ -55,17 +54,17 @@ try:
             arcpy.management.SelectLayerByLocation(selectionLayer, overlapType, selectFeatures, searchDist, selectType)
             answer = arcpy.management.GetCount(selectionLayer)
 
-        # write the answer to the file
+        # write the output to the file
         aFile.write("Q1 {0}) {1} land parcels.\n\n".format(qLetter, answer))
 
-        # update question number and letter
+        # update task number and letter
         qNum += 1
         qLetter = chr(ord(qLetter) + 1)
 
     # close file outside of loop
     aFile.close()
 
-    # Q2
+    # TASK 2
     # ____________
 
     # create cursor object
