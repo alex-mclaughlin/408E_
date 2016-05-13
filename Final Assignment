@@ -1,0 +1,111 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Final Assignment
+
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os, numpy
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"C:\AMclaughlin\Final_Assignment\Final_Assignment.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+try:
+    # Main Python code here
+    #create file geodatabase
+    aPath = r"C:\AMclaughlin\Final_Assignment"
+    aNewGeo = "Projected.gdb"
+    aFGDB = arcpy.CreateFileGDB_management(aPath, aNewGeo)
+    aWS2 = r"C:\AMclaughlin\Final_Assignment\Projected.gdb"
+    #open a text file
+    aFile = open(r"C:\AMclaughlin\Final_Assignment\aFile.txt", "w")
+    #step2
+    #create raster list
+
+    aList = arcpy.ListRasters()
+    print aList
+
+    for aRaster in aList:
+        aRObject = arcpy.Raster(aRaster)
+        #QA
+        #print aRObject.name, aRObject.spatialReference.type 
+        #check for spatial reference = geographic
+        if aRObject.spatialReference.type == "Geographic":
+        #project geographic into projected
+            #print aRObject.name
+            aSR = arcpy.SpatialReference(26945)
+            arcpy.ProjectRaster_management(aRaster, "{0}\{1}_P".format(aWS2, aRaster), aSR)
+        #copy project files
+        elif aROject.spatialReference.type == "Projected":
+            arcpy.Copy_management(aRaster, "{0}\{1}_P".format(aWS2, aRaster))
+        #unknown = write to text file
+        else:
+            #print "{0} has no spatial reference".format(aRaster)
+            aFile.write("{0} has no spatial reference".format(aRaster))
+
+    #q1-q5 check for feature classes
+    #create FClist
+    aFCList = arcpy.ListFeatureClasses()
+
+    for aFC in aFCList:
+        desc = arcpy.Describe(aFC)
+        #print "{0} is a {1}\n".format(aFC, desc.shapeType)
+        aFile.write("{0} is a {1}\n".format(aFC, desc.shapeType))
+        sr = desc.spatialReference.type
+        #QA
+        #print aFC, desc.spatialReference.type 
+        #check for spatial reference = geographic
+        if sr == "Geographic":
+        #project geographic into projected
+            #print aFC
+            aSR = arcpy.SpatialReference(26945)
+            arcpy.Project_management(aFC, "{0}\{1}_P".format(aWS2, aFC), aSR)
+        #copy project files
+        elif sr == "Projected":
+            #print aFC
+            arcpy.Copy_management(aFC, "{0}\{1}_P".format(aWS2, aFC))
+        #unknown = write to text file
+        else:
+            #print "{0} has no spatial reference".format(aFC)
+            aFile.write("{0} has no spatial reference".format(aRaster))
+
+    #q6
+    #create cursor with only CA zipcode populations where the CA zipcode begins with Y
+    aCursor = arcpy.da.SearchCursor("ZipCodes", "POP2001", "PO_NAME LIKE 'R%'")
+    aList= []
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    aMean = numpy.mean(aList)
+    #print mean
+    print "Q6) The mean population of 2001 zip codes that begin with the letter R is {0}.\n".format(aMean)
+    aFile.write("Q1A) The mean population of 2001 zip codes that begin with the letter R is {0}.\n".format(aMean))
+
+    #del aRow
+    #del aCursor
+
+    aFile.close()
+    
+except:
+    
+    # Code to run when an error occured
+    #del aCursor
+    #del aRow
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"
+
+
+
+
