@@ -1,0 +1,66 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Exam 4 
+
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os, numpy
+
+# Set geoprocessing environment: a) set  the workspace environment 
+arcpy.env.workspace = r"C:\AMclaughlin\Exam-04\LanParcels.gdb"
+
+# Set geoprocessing environment: b) the overwriteOutput parameter controls whether tools will automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+
+try:
+    # Main Python code here
+    aFile = open(r"C:\AMclaughlin\Exam-04\aFile.txt", "w")
+    #Q1a)
+    aCursor = arcpy.da.UpdateCursor("LandParcels", "*")
+    for aRow in aCursor:
+        #print "This value 7 {0}, this value 6 {1}\n".format(aRow[4], aRow[3])
+        aRow[5] = float(aRow[4] - aRow[3])/aRow[3]*100
+        aCursor.updateRow(aRow)
+
+        
+        
+    #Q1b)
+    aList = []
+    aCursor = arcpy.da.SearchCursor("LandParcels", ["Per_Chg"], '"LU_ALF" = \'High-Density Multiple Family Residential\'')
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    #print "QA {0}".format(numpy.mean(aList))
+    aFile.write("The average percentage change between 2006 and 2012 for high density multiple family residential is {0}".format(numpy.mean(aList)))
+
+    aFile.close()
+    
+
+    
+        
+    
+    
+        
+    
+    
+except:
+    
+    # Code to run when an error occured
+    del aRow
+    del aCursor
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"
+
+
+
+
