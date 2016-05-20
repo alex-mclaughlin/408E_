@@ -1,0 +1,70 @@
+# 
+# Created by: Alex Mclaughlin
+# Description: Final Exam
+'''
+This is additional description area
+'''
+
+# import arcpy site-package and os module
+import arcpy, os, numpy
+
+# Set geoprocessing environment:
+# a) set the workspace environment 
+aWS = r"C:\AMclaughlin\Final_Exam\UnitedStates.gdb"
+arcpy.env.workspace = aWS
+# Set geoprocessing environment:
+# b) the overwriteOutput parameter controls whether tools will
+#    automatically overwrite any existing output 
+arcpy.env.overwriteOutput = True
+aFile = open(r"\AMclaughlin\Final_Exam\aFile.txt", "w")
+
+try:
+    #print aWS
+    #Question 1 A)
+    
+    aList =arcpy.ListFeatureClasses()
+    for aFC in aList:
+        desc = arcpy.Describe(aFC)
+        aSR = desc.spatialReference.type
+        if aSR == "Geographic":
+            aSR1 = arcpy.SpatialReference(5070)
+            #print aSR1
+            #print aFC
+            aFile.write("Q1A {0} is not projected\n".format(aFC))
+            arcpy.Project_management(aFC, "{0}\{1}_p".format(aWS, aFC), aSR1)
+        elif aSR == "Projected":
+            aFile.write("Q1A {0} is projected\n".format(aFC))
+            arcpy.CopyFeatures_management(aFC, aFC + "_p")
+        else:
+            #print aFC
+            print "{0} has no projection. Projection must be defined".format(aFC)
+
+
+    #Question 1 B)
+    aCursor = arcpy.da.SearchCursor("Counties", ["ASIAN"], '"SUB_REGION" = \'New England\'')
+    aList = []
+    for aRow in aCursor:
+        aList.append(aRow[0])
+    aFile.write("Q1B {0} is the mean of the Asian Population counties in the New England subregion\n".format(numpy.mean(aList)))
+
+    aFile.close()
+        
+        
+            
+            
+
+
+except ValueError as e:
+    
+    # Code to run when an error occured
+    print e
+    print "An ERROR Occured!"
+    print "\n" + arcpy.GetMessages()      
+
+else:
+    
+    # Message when there was no error
+    print "\nNo Error occurred"
+    
+# Script end message
+print "\nEnd of the script!"    
